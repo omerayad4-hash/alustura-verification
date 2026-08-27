@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>شركة الأسطورة — نظام التحقق</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f6f8;margin:0;color:#17202a}
+header{background:#111827;color:white;padding:22px;text-align:center}
+main{max-width:850px;margin:25px auto;padding:0 16px}
+.card{background:white;border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 3px 14px #0001}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd1d9;border-radius:8px}
+button{margin-top:16px;padding:12px 20px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer}
+.result{padding:15px;border-radius:10px;margin-top:15px}
+.ok{background:#e9f8ef;border:1px solid #74c69d}.bad{background:#fdecec;border:1px solid #e99}
+.small{color:#667085;font-size:13px}
+code{background:#f1f3f5;padding:3px 7px;border-radius:5px}
+</style>
+</head>
+<body>
+<header>
+<h1>شركة الأسطورة</h1>
+<div>نظام التحقق من الكتب الرسمية</div>
+</header>
+<main>
+<div class="card">
+<h2>تجربة التحقق</h2>
+<p>أدخل رمز التحقق الموجود على المخاطبة.</p>
+<label>رمز التحقق</label>
+<input id="code" placeholder="مثال: AST-2026-8F42K91">
+<button onclick="verify()">تحقق من الكتاب</button>
+<div id="out"></div>
+</div>
+
+<div class="card">
+<h3>كيف يعمل النظام؟</h3>
+<p>كل مخاطبة تحصل على رمز فريد. في النظام الحقيقي سيكون الرمز مرتبطًا ببصمة PDF وتوقيع تشفيري، لذلك نسخ QR ووضعه على مخاطبة أخرى لا يجعلها صحيحة.</p>
+<p class="small">هذه نسخة واجهة تجريبية فقط وليست نظامًا رسميًا بعد.</p>
+</div>
+</main>
+<script>
+const records = {
+ "AST-2026-8F42K91": {
+   no:"125/2026", date:"28/08/2026", to:"وزارة تجريبية",
+   subject:"مخاطبة رسمية تجريبية", status:"ساري"
+ }
+};
+function verify(){
+ const c=document.getElementById("code").value.trim().toUpperCase();
+ const o=document.getElementById("out");
+ if(records[c]){
+  const r=records[c];
+  o.innerHTML=`<div class="result ok"><h3>🟢 الكتاب موثّق</h3>
+  <p><b>شركة الأسطورة</b></p>
+  <p>رقم الكتاب: <b>${r.no}</b><br>التاريخ: ${r.date}<br>الجهة: ${r.to}<br>الموضوع: ${r.subject}<br>الحالة: <b>${r.status}</b></p>
+  <p>✓ رمز التحقق موجود في السجل الرسمي</p></div>`;
+ }else{
+  o.innerHTML=`<div class="result bad"><h3>🔴 لم يتم التحقق</h3>
+  <p>رمز التحقق غير موجود في السجل الرسمي لشركة الأسطورة.</p></div>`;
+ }
+}
+</script>
+</body>
+</html>
