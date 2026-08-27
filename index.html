@@ -1,65 +1,529 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>شركة الأسطورة — نظام التحقق</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>الأسطورة | التحقق من الوثائق الرسمية</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f5f6f8;margin:0;color:#17202a}
-header{background:#111827;color:white;padding:22px;text-align:center}
-main{max-width:850px;margin:25px auto;padding:0 16px}
-.card{background:white;border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 3px 14px #0001}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd1d9;border-radius:8px}
-button{margin-top:16px;padding:12px 20px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer}
-.result{padding:15px;border-radius:10px;margin-top:15px}
-.ok{background:#e9f8ef;border:1px solid #74c69d}.bad{background:#fdecec;border:1px solid #e99}
-.small{color:#667085;font-size:13px}
-code{background:#f1f3f5;padding:3px 7px;border-radius:5px}
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Tahoma, sans-serif;
+        background: #f4f6f8;
+        color: #17202a;
+    }
+
+    header {
+        background: #111827;
+        color: white;
+        padding: 28px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+    }
+
+    header p {
+        margin: 0;
+        color: #d1d5db;
+        font-size: 15px;
+    }
+
+    main {
+        max-width: 760px;
+        margin: 35px auto;
+        padding: 0 18px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .title h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+    }
+
+    .title p {
+        color: #6b7280;
+        margin: 0;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 9px;
+    }
+
+    input {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 16px;
+        direction: ltr;
+        text-align: left;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #111827;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 15px;
+        padding: 15px;
+        border: 0;
+        border-radius: 10px;
+        background: #111827;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1f2937;
+    }
+
+    .result {
+        margin-top: 25px;
+        display: none;
+    }
+
+    .success {
+        border: 1px solid #86efac;
+        background: #f0fdf4;
+    }
+
+    .error {
+        border: 1px solid #fca5a5;
+        background: #fef2f2;
+        color: #991b1b;
+    }
+
+    .status {
+        text-align: center;
+        font-size: 21px;
+        font-weight: bold;
+        margin-bottom: 22px;
+    }
+
+    .success .status {
+        color: #15803d;
+    }
+
+    .info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .item {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 14px;
+    }
+
+    .item strong {
+        display: block;
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .item span {
+        font-size: 15px;
+        word-break: break-word;
+    }
+
+    .code {
+        direction: ltr;
+        text-align: left;
+        font-family: monospace;
+    }
+
+    .loading {
+        text-align: center;
+        color: #6b7280;
+        margin-top: 18px;
+        display: none;
+    }
+
+    footer {
+        text-align: center;
+        color: #6b7280;
+        font-size: 13px;
+        padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+        .card {
+            padding: 20px;
+        }
+
+        .info {
+            grid-template-columns: 1fr;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+    }
 </style>
 </head>
-<body>
-<header>
-<h1>شركة الأسطورة</h1>
-<div>نظام التحقق من الكتب الرسمية</div>
-</header>
-<main>
-<div class="card">
-<h2>تجربة التحقق</h2>
-<p>أدخل رمز التحقق الموجود على المخاطبة.</p>
-<label>رمز التحقق</label>
-<input id="code" placeholder="مثال: AST-2026-8F42K91">
-<button onclick="verify()">تحقق من الكتاب</button>
-<div id="out"></div>
-</div>
 
-<div class="card">
-<h3>كيف يعمل النظام؟</h3>
-<p>كل مخاطبة تحصل على رمز فريد. في النظام الحقيقي سيكون الرمز مرتبطًا ببصمة PDF وتوقيع تشفيري، لذلك نسخ QR ووضعه على مخاطبة أخرى لا يجعلها صحيحة.</p>
-<p class="small">هذه نسخة واجهة تجريبية فقط وليست نظامًا رسميًا بعد.</p>
-</div>
+<body>
+
+<header>
+    <h1>الأسطورة</h1>
+    <p>نظام التحقق من الوثائق الرسمية</p>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <div class="title">
+            <h2>التحقق من صحة الوثيقة</h2>
+            <p>أدخل رمز التحقق الموجود على الوثيقة</p>
+        </div>
+
+        <label for="verificationCode">رمز التحقق</label>
+
+        <input
+            id="verificationCode"
+            type="text"
+            placeholder="مثال: AST-0BD2928125AA4C03AEA1091CFDF557B0"
+            autocomplete="off"
+        >
+
+        <button onclick="verifyDocument()">
+            التحقق من الوثيقة
+        </button>
+
+        <div id="loading" class="loading">
+            جارٍ التحقق من البيانات...
+        </div>
+
+        <div id="result" class="result"></div>
+
+    </div>
+
 </main>
+
+<footer>
+    نظام التحقق الإلكتروني للوثائق الرسمية © الأسطورة
+</footer>
+
 <script>
-const records = {
- "AST-2026-8F42K91": {
-   no:"125/2026", date:"28/08/2026", to:"وزارة تجريبية",
-   subject:"مخاطبة رسمية تجريبية", status:"ساري"
- }
-};
-function verify(){
- const c=document.getElementById("code").value.trim().toUpperCase();
- const o=document.getElementById("out");
- if(records[c]){
-  const r=records[c];
-  o.innerHTML=`<div class="result ok"><h3>🟢 الكتاب موثّق</h3>
-  <p><b>شركة الأسطورة</b></p>
-  <p>رقم الكتاب: <b>${r.no}</b><br>التاريخ: ${r.date}<br>الجهة: ${r.to}<br>الموضوع: ${r.subject}<br>الحالة: <b>${r.status}</b></p>
-  <p>✓ رمز التحقق موجود في السجل الرسمي</p></div>`;
- }else{
-  o.innerHTML=`<div class="result bad"><h3>🔴 لم يتم التحقق</h3>
-  <p>رمز التحقق غير موجود في السجل الرسمي لشركة الأسطورة.</p></div>`;
- }
+
+const SUPABASE_URL = "https://zhaqsiflwid...supabase.co";
+
+/*
+    ضع هنا الـ Publishable Key الخاص بمشروعك
+*/
+const SUPABASE_KEY = "ضع_المفتاح_هنا";
+
+
+async function verifyDocument() {
+
+    const input = document.getElementById("verificationCode");
+    const result = document.getElementById("result");
+    const loading = document.getElementById("loading");
+
+    const code = input.value.trim();
+
+    result.style.display = "none";
+    result.innerHTML = "";
+
+    if (!code) {
+        showError("يرجى إدخال رمز التحقق.");
+        return;
+    }
+
+    loading.style.display = "block";
+
+    try {
+
+        const url =
+            SUPABASE_URL +
+            "/rest/v1/official_documents" +
+            "?select=document_number,document_date,recipient,subject,signatory,status,verification_code" +
+            "&verification_code=eq." +
+            encodeURIComponent(code);
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("حدث خطأ في الاتصال بقاعدة البيانات.");
+        }
+
+        const documents = await response.json();
+
+        loading.style.display = "none";
+
+        if (!documents.length) {
+            showError("رمز التحقق غير موجود أو أن الوثيقة غير مسجلة في النظام.");
+            return;
+        }
+
+        const doc = documents[0];
+
+        showDocument(doc);
+
+    } catch (error) {
+
+        loading.style.display = "none";
+
+        showError(
+            "تعذر الاتصال بنظام التحقق. يرجى المحاولة مرة أخرى."
+        );
+
+        console.error(error);
+    }
+}
+
+
+function showDocument(doc) {
+
+    const result = document.getElementById("result");
+
+    const status =
+        doc.status === "active"
+            ? "سارية وصحيحة"
+            : doc.status || "غير محددة";
+
+    result.className = "result success";
+
+    result.innerHTML = `
+        <div class="status">
+            ✓ الوثيقة صحيحة
+        </div>
+
+        <div class="info">
+
+            <div class="item">
+                <strong>رقم الوثيقة</strong>
+                <span>${escapeHtml(doc.document_number || "-")}</span>
+            </div>
+
+            <div class="item">
+                <strong>تاريخ الوثيقة</strong>
+                <span>${escapeHtml(doc.document_date || "-")}</span>
+            </div>
+
+            <div class="item">
+                <strong>الجهة المستلمة</strong>
+                <span>${escapeHtml(doc.recipient || "-")}</span>
+            </div>
+
+            <div class="item">
+                <strong>الموضوع</strong>
+                <span>${escapeHtml(doc.subject || "-")}</span>
+            </div>
+
+            <div class="item">
+                <strong>الموقّع</strong>
+                <span>${escapeHtml(doc.signatory || "-")}</span>
+            </div>
+
+            <div class="item">
+                <strong>حالة الوثيقة</strong>
+                <span>${escapeHtml(status)}</span>
+            </div>
+
+            <div class="item" style="grid-column: 1 / -1;">
+                <strong>رمز التحقق</strong>
+                <span class="code">
+                    ${escapeHtml(doc.verification_code || "-")}
+                </span>
+            </div>
+
+        </div>
+    `;
+
+    result.style.display = "block";
+}
+
+
+function showError(message) {
+
+    const result = document.getElementById("result");
+
+    result.className = "result error";
+
+    result.innerHTML = `
+        <div class="status">
+            ✕ تعذر التحقق
+        </div>
+
+        <div style="text-align:center;">
+            ${escapeHtml(message)}
+        </div>
+    `;
+
+    result.style.display = "block";
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/*
+   السماح بفتح الرابط مباشرة باستخدام:
+   ?code=AST-XXXX
+*/
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const params = new URLSearchParams(window.location.search);
+
+    const code = params.get("code");
+
+    if (code) {
+
+        document.getElementById("verificationCode").value = code;
+
+        verifyDocument();
+    }
+});
+
+<script>
+const SUPABASE_URL = "https://zhaqsifliwidyhfapxsk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
+
+async function verifyDocument() {
+    const code = document.getElementById("verificationCode").value.trim().toUpperCase();
+    const out = document.getElementById("out");
+
+    if (!code) {
+        out.innerHTML = `
+            <div class="result bad">
+                <h3>⚠️ أدخل رمز التحقق</h3>
+                <p>يرجى إدخال رمز التحقق الموجود على الكتاب.</p>
+            </div>
+        `;
+        return;
+    }
+
+    out.innerHTML = `
+        <div class="result">
+            <p>جاري التحقق من الكتاب...</p>
+        </div>
+    `;
+
+    try {
+        const url =
+            `${SUPABASE_URL}/rest/v1/official_documents` +
+            `?verification_code=eq.${encodeURIComponent(code)}` +
+            `&select=document_number,document_date,recipient,subject,signatory,status` +
+            `&limit=1`;
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("حدث خطأ في الاتصال بقاعدة البيانات");
+        }
+
+        const data = await response.json();
+
+        if (data.length === 0) {
+            out.innerHTML = `
+                <div class="result bad">
+                    <h3>🔴 لم يتم التحقق</h3>
+                    <p>رمز التحقق غير موجود في السجل الرسمي.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const doc = data[0];
+
+        out.innerHTML = `
+            <div class="result ok">
+                <h3>🟢 الكتاب موثّق</h3>
+
+                <p><b>شركة الأسطورة</b></p>
+
+                <p>
+                    رقم الكتاب:
+                    <b>${doc.document_number || "-"}</b>
+                    <br>
+
+                    التاريخ:
+                    ${doc.document_date || "-"}
+                    <br>
+
+                    الجهة:
+                    ${doc.recipient || "-"}
+                    <br>
+
+                    الموضوع:
+                    ${doc.subject || "-"}
+                    <br>
+
+                    الموقّع:
+                    ${doc.signatory || "-"}
+                    <br>
+
+                    الحالة:
+                    <b>${doc.status || "-"}</b>
+                </p>
+
+                <p>✓ رمز التحقق موجود في السجل الرسمي</p>
+            </div>
+        `;
+
+    } catch (error) {
+
+        console.error(error);
+
+        out.innerHTML = `
+            <div class="result bad">
+                <h3>🔴 تعذر الاتصال</h3>
+                <p>حدث خطأ أثناء الاتصال بنظام التحقق.</p>
+            </div>
+        `;
+    }
 }
 </script>
+
 </body>
 </html>
