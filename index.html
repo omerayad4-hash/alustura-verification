@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,9 +14,9 @@
 
     body {
       margin: 0;
-      font-family: Arial, Tahoma, sans-serif;
       background: #f4f6f8;
-      color: #17202a;
+      color: #101827;
+      font-family: Arial, Tahoma, sans-serif;
     }
 
     header {
@@ -36,121 +37,120 @@
     }
 
     .container {
+      width: 90%;
       max-width: 900px;
-      margin: 45px auto;
-      padding: 0 20px;
+      margin: 55px auto;
     }
 
     .card {
       background: white;
       border-radius: 20px;
-      padding: 35px;
-      box-shadow: 0 10px 35px rgba(0,0,0,.08);
+      padding: 38px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
     }
 
     h2 {
       text-align: center;
-      margin: 0 0 8px;
-      font-size: 28px;
+      margin: 0;
+      font-size: 29px;
     }
 
     .subtitle {
       text-align: center;
       color: #777;
-      margin-bottom: 35px;
+      margin-top: 10px;
+      margin-bottom: 40px;
       font-size: 17px;
     }
 
     label {
       display: block;
-      margin-bottom: 10px;
       font-weight: bold;
       font-size: 17px;
+      margin-bottom: 10px;
     }
 
     input {
       width: 100%;
-      padding: 17px;
+      height: 70px;
       border: 1px solid #ccd3da;
-      border-radius: 12px;
-      font-size: 18px;
+      border-radius: 13px;
+      padding: 15px 20px;
+      font-size: 20px;
       direction: ltr;
       text-align: left;
       outline: none;
     }
 
     input:focus {
-      border-color: #17202a;
+      border-color: #101827;
     }
 
     button {
       width: 100%;
-      margin-top: 18px;
-      padding: 17px;
-      border: 0;
-      border-radius: 12px;
+      height: 70px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 13px;
       background: #101827;
       color: white;
-      font-size: 19px;
+      font-size: 20px;
       font-weight: bold;
       cursor: pointer;
     }
 
     button:hover {
-      background: #1b2638;
+      background: #1c283a;
     }
 
     button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
+      opacity: 0.6;
+      cursor: wait;
     }
 
-    .result {
+    #result {
       margin-top: 30px;
-      padding: 25px;
-      border-radius: 15px;
       display: none;
+      padding: 28px;
+      border-radius: 16px;
     }
 
     .success {
       background: #f0fff4;
       border: 1px solid #8fd19e;
-      color: #17202a;
     }
 
     .error {
       background: #fff2f2;
-      border: 1px solid #ff9c9c;
+      border: 1px solid #ff9999;
       color: #a52222;
     }
 
-    .result h3 {
+    .result-title {
       text-align: center;
-      margin-top: 0;
-      font-size: 25px;
+      font-size: 27px;
+      font-weight: bold;
+      margin-bottom: 25px;
     }
 
-    .details {
-      margin-top: 20px;
-    }
-
-    .row {
+    .info-row {
       display: flex;
       justify-content: space-between;
       gap: 20px;
       padding: 14px 0;
       border-bottom: 1px solid #ddd;
+      font-size: 17px;
     }
 
-    .row:last-child {
+    .info-row:last-child {
       border-bottom: none;
     }
 
-    .name {
+    .info-label {
       font-weight: bold;
     }
 
-    .value {
+    .info-value {
       text-align: left;
     }
 
@@ -171,58 +171,72 @@
         font-size: 28px;
       }
 
-      .row {
+      .info-row {
         flex-direction: column;
-        gap: 5px;
+        gap: 6px;
       }
 
-      .value {
+      .info-value {
         text-align: right;
       }
     }
   </style>
 </head>
 
+
 <body>
 
 <header>
+
   <h1>الأسطورة</h1>
-  <p>نظام التحقق من الوثائق الرسمية</p>
+
+  <p>
+    نظام التحقق من الوثائق الرسمية
+  </p>
+
 </header>
+
 
 <div class="container">
 
   <div class="card">
 
-    <h2>التحقق من صحة الوثيقة</h2>
+    <h2>
+      التحقق من صحة الوثيقة
+    </h2>
 
     <div class="subtitle">
       أدخل رمز التحقق الموجود على الوثيقة
     </div>
 
+
     <label for="verificationCode">
       رمز التحقق
     </label>
 
+
     <input
-      type="text"
       id="verificationCode"
-      autocomplete="off"
+      type="text"
       placeholder="أدخل رمز التحقق"
+      autocomplete="off"
     >
+
 
     <button
       id="verifyButton"
-      onclick="verifyDocument()"
+      type="button"
     >
       التحقق من الوثيقة
     </button>
 
-    <div id="out" class="result"></div>
+
+    <div id="result"></div>
 
   </div>
 
 </div>
+
 
 <footer>
   نظام التحقق الإلكتروني للوثائق الرسمية © الأسطورة
@@ -231,9 +245,9 @@
 
 <script>
 
-/* =====================================
-   إعدادات Supabase
-   ===================================== */
+/* =========================================
+   SUPABASE
+   ========================================= */
 
 const SUPABASE_URL =
   "https://zhaqsifliwidyhfapxsk.supabase.co";
@@ -242,81 +256,128 @@ const SUPABASE_KEY =
   "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
 
 
-/* =====================================
-   التحقق من الوثيقة
-   ===================================== */
+/* =========================================
+   عناصر الصفحة
+   ========================================= */
+
+const codeInput =
+  window["document"].getElementById("verificationCode");
+
+const verifyButton =
+  window["document"].getElementById("verifyButton");
+
+const resultBox =
+  window["document"].getElementById("result");
+
+
+/* =========================================
+   زر التحقق
+   ========================================= */
+
+verifyButton.addEventListener(
+  "click",
+  verifyDocument
+);
+
+
+/* =========================================
+   التحقق
+   ========================================= */
 
 async function verifyDocument() {
 
-  const input =
-    window.document.getElementById("verificationCode");
-
-  const button =
-    window.document.getElementById("verifyButton");
-
-  const out =
-    window.document.getElementById("out");
+  const code =
+    codeInput.value.trim();
 
 
-  const code = input.value.trim();
-
-
-  out.style.display = "none";
-  out.innerHTML = "";
+  resultBox.style.display = "none";
+  resultBox.innerHTML = "";
 
 
   if (!code) {
 
-    showError("يرجى إدخال رمز التحقق الموجود على الوثيقة.");
+    showError(
+      "يرجى إدخال رمز التحقق."
+    );
 
     return;
   }
 
 
-  button.disabled = true;
-  button.textContent = "جارٍ التحقق...";
+  verifyButton.disabled = true;
+
+  verifyButton.textContent =
+    "جارٍ التحقق...";
 
 
   try {
 
     const response = await fetch(
-      SUPABASE_URL + "/rest/v1/rpc/verify_document",
+
+      SUPABASE_URL +
+      "/rest/v1/rpc/verify_document",
+
       {
+
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY
+
+          "Content-Type":
+            "application/json",
+
+          "apikey":
+            SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " + SUPABASE_KEY
+
         },
 
         body: JSON.stringify({
+
           p_code: code
+
         })
+
       }
+
     );
 
 
-    const responseText =
+    const text =
       await response.text();
 
 
     console.log(
-      "HTTP STATUS:",
+      "STATUS:",
       response.status
     );
 
     console.log(
-      "SUPABASE RESPONSE:",
-      responseText
+      "RESPONSE:",
+      text
     );
+
+
+    if (!response.ok) {
+
+      showError(
+        "حدث خطأ في الاتصال بنظام التحقق."
+      );
+
+      console.error(text);
+
+      return;
+    }
 
 
     let data;
 
     try {
 
-      data = JSON.parse(responseText);
+      data =
+        JSON.parse(text);
 
     } catch {
 
@@ -325,22 +386,11 @@ async function verifyDocument() {
     }
 
 
-    if (!response.ok) {
-
-      showError(
-        "حدث خطأ أثناء الاتصال بنظام التحقق."
-      );
-
-      console.error(
-        "Supabase error:",
-        responseText
-      );
-
-      return;
-    }
-
-
-    if (!data || data.length === 0) {
+    if (
+      !data ||
+      !Array.isArray(data) ||
+      data.length === 0
+    ) {
 
       showError(
         "رمز التحقق غير موجود أو أن الوثيقة غير مسجلة في النظام."
@@ -350,28 +400,21 @@ async function verifyDocument() {
     }
 
 
-    /* مهم:
-       استخدمنا doc بدل document
-       حتى لا يحدث تعارض مع document الخاص بالمتصفح.
-    */
-
-    const doc = data[0];
+    const record =
+      data[0];
 
 
-    showSuccess(doc);
+    showSuccess(record);
 
   }
 
 
   catch (error) {
 
-    console.error(
-      "Verification error:",
-      error
-    );
+    console.error(error);
 
     showError(
-      "حدث خطأ أثناء التحقق. حاول مرة أخرى."
+      "فشل الاتصال بالخادم."
     );
 
   }
@@ -379,134 +422,167 @@ async function verifyDocument() {
 
   finally {
 
-    button.disabled = false;
-    button.textContent = "التحقق من الوثيقة";
+    verifyButton.disabled = false;
+
+    verifyButton.textContent =
+      "التحقق من الوثيقة";
 
   }
 
 }
 
 
-/* =====================================
-   عرض الوثيقة الصحيحة
-   ===================================== */
+/* =========================================
+   نجاح
+   ========================================= */
 
-function showSuccess(doc) {
+function showSuccess(record) {
 
-  const out =
-    window.document.getElementById("out");
+  resultBox.className =
+    "success";
 
+  resultBox.innerHTML = `
 
-  out.className =
-    "result success";
-
-
-  out.innerHTML = `
-
-    <h3>✓ الوثيقة صحيحة</h3>
-
-    <div class="details">
-
-      <div class="row">
-        <span class="name">رقم الوثيقة</span>
-        <span class="value">
-          ${escapeHtml(doc.document_number || "-")}
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="name">تاريخ الوثيقة</span>
-        <span class="value">
-          ${escapeHtml(doc.document_date || "-")}
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="name">الجهة المستلمة</span>
-        <span class="value">
-          ${escapeHtml(doc.recipient || "-")}
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="name">الموضوع</span>
-        <span class="value">
-          ${escapeHtml(doc.subject || "-")}
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="name">الموقّع</span>
-        <span class="value">
-          ${escapeHtml(doc.signatory || "-")}
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="name">الحالة</span>
-        <span class="value">
-          ${escapeHtml(doc.status || "-")}
-        </span>
-      </div>
-
+    <div class="result-title">
+      ✓ الوثيقة صحيحة
     </div>
+
+    <div class="info-row">
+      <span class="info-label">
+        رقم الوثيقة
+      </span>
+
+      <span class="info-value">
+        ${safe(record.document_number)}
+      </span>
+    </div>
+
+
+    <div class="info-row">
+      <span class="info-label">
+        تاريخ الوثيقة
+      </span>
+
+      <span class="info-value">
+        ${safe(record.document_date)}
+      </span>
+    </div>
+
+
+    <div class="info-row">
+      <span class="info-label">
+        الجهة المستلمة
+      </span>
+
+      <span class="info-value">
+        ${safe(record.recipient)}
+      </span>
+    </div>
+
+
+    <div class="info-row">
+      <span class="info-label">
+        الموضوع
+      </span>
+
+      <span class="info-value">
+        ${safe(record.subject)}
+      </span>
+    </div>
+
+
+    <div class="info-row">
+      <span class="info-label">
+        الموقّع
+      </span>
+
+      <span class="info-value">
+        ${safe(record.signatory)}
+      </span>
+    </div>
+
+
+    <div class="info-row">
+      <span class="info-label">
+        الحالة
+      </span>
+
+      <span class="info-value">
+        ${safe(record.status)}
+      </span>
+    </div>
+
   `;
 
 
-  out.style.display = "block";
+  resultBox.style.display =
+    "block";
 }
 
 
-/* =====================================
-   عرض الخطأ
-   ===================================== */
+/* =========================================
+   خطأ
+   ========================================= */
 
 function showError(message) {
 
-  const out =
-    window.document.getElementById("out");
+  resultBox.className =
+    "error";
 
+  resultBox.innerHTML = `
 
-  out.className =
-    "result error";
+    <div class="result-title">
+      ✕ تعذر التحقق
+    </div>
 
-
-  out.innerHTML = `
-
-    <h3>✕ تعذر التحقق</h3>
-
-    <p style="text-align:center;">
-      ${escapeHtml(message)}
-    </p>
+    <div style="text-align:center;">
+      ${safe(message)}
+    </div>
 
   `;
 
 
-  out.style.display = "block";
+  resultBox.style.display =
+    "block";
 }
 
 
-/* =====================================
-   حماية النصوص
-   ===================================== */
+/* =========================================
+   حماية النص
+   ========================================= */
 
-function escapeHtml(value) {
+function safe(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "-";
+
+  }
+
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+    .replaceAll("&", "&amp;")
+
+    .replaceAll("<", "&lt;")
+
+    .replaceAll(">", "&gt;")
+
+    .replaceAll('"', "&quot;")
+
+    .replaceAll("'", "&#039;");
 
 }
 
 
-/* =====================================
-   التحقق من الرابط المباشر
+/* =========================================
+   قراءة code من الرابط
    مثال:
-   ?code=AST-XXXXXXXX
-   ===================================== */
+   ?code=AST-XXXXX
+   ========================================= */
 
 window.addEventListener(
   "DOMContentLoaded",
@@ -518,15 +594,14 @@ window.addEventListener(
       );
 
 
-    const code =
+    const urlCode =
       params.get("code");
 
 
-    if (code) {
+    if (urlCode) {
 
-      window.document
-        .getElementById("verificationCode")
-        .value = code;
+      codeInput.value =
+        urlCode;
 
       verifyDocument();
 
@@ -538,4 +613,5 @@ window.addEventListener(
 </script>
 
 </body>
+
 </html>
