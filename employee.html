@@ -8,7 +8,6 @@
   <title>الأسطورة | إنشاء وثيقة</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -109,10 +108,6 @@
       font-size: 19px;
       font-weight: bold;
       cursor: pointer;
-    }
-
-    .create-button:hover {
-      background: #1c283a;
     }
 
     .create-button:disabled {
@@ -218,7 +213,6 @@
     }
 
     @media (max-width: 600px) {
-
       .card {
         padding: 22px;
       }
@@ -226,16 +220,12 @@
       .actions {
         flex-direction: column;
       }
-
     }
-
   </style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -366,16 +356,13 @@
 </footer>
 
 
-<!-- مكتبة توليد QR -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 
 <script>
 
-
 /* =====================================
-   إعدادات Supabase
+   SUPABASE
    ===================================== */
 
 const SUPABASE_URL =
@@ -386,7 +373,7 @@ const SUPABASE_KEY =
 
 
 /* =====================================
-   رابط صفحة التحقق
+   صفحة التحقق الرئيسية
    ===================================== */
 
 const VERIFY_PAGE =
@@ -408,17 +395,15 @@ const result =
 
 
 /* =====================================
-   توليد رمز تحقق فريد
+   توليد رمز التحقق
    ===================================== */
 
 function generateVerificationCode() {
 
-  const randomPart =
+  return "AST-" +
     crypto.randomUUID()
       .replaceAll("-", "")
       .toUpperCase();
-
-  return "AST-" + randomPart;
 
 }
 
@@ -435,37 +420,33 @@ form.addEventListener(
 
 
     const documentNumber =
-      document
-        .getElementById("documentNumber")
-        .value
-        .trim();
+      document.getElementById(
+        "documentNumber"
+      ).value.trim();
 
 
     const documentDate =
-      document
-        .getElementById("documentDate")
-        .value;
+      document.getElementById(
+        "documentDate"
+      ).value;
 
 
     const recipient =
-      document
-        .getElementById("recipient")
-        .value
-        .trim();
+      document.getElementById(
+        "recipient"
+      ).value.trim();
 
 
     const subject =
-      document
-        .getElementById("subject")
-        .value
-        .trim();
+      document.getElementById(
+        "subject"
+      ).value.trim();
 
 
     const signatory =
-      document
-        .getElementById("signatory")
-        .value
-        .trim();
+      document.getElementById(
+        "signatory"
+      ).value.trim();
 
 
     if (
@@ -492,6 +473,12 @@ form.addEventListener(
 
     try {
 
+      /*
+       * الرمز يولّد هنا.
+       * document_hash و id و status
+       * يتم توليدها تلقائيًا من قاعدة البيانات.
+       */
+
       const verificationCode =
         generateVerificationCode();
 
@@ -515,7 +502,8 @@ form.addEventListener(
                 SUPABASE_KEY,
 
               "Authorization":
-                "Bearer " + SUPABASE_KEY,
+                "Bearer " +
+                SUPABASE_KEY,
 
               "Prefer":
                 "return=representation"
@@ -527,23 +515,20 @@ form.addEventListener(
               document_number:
                 documentNumber,
 
-              document_date:
-                documentDate,
-
-              recipient:
-                recipient,
+              verification_code:
+                verificationCode,
 
               subject:
                 subject,
 
+              recipient:
+                recipient,
+
               signatory:
                 signatory,
 
-              verification_code:
-                verificationCode,
-
-              status:
-                "active"
+              document_date:
+                documentDate
 
             })
 
@@ -582,9 +567,9 @@ form.addEventListener(
       }
 
 
-      /* =====================================
-         رابط التحقق الذي سيكون داخل QR
-         ===================================== */
+      /*
+       * رابط التحقق الذي سيدخل داخل QR
+       */
 
       const verifyUrl =
         VERIFY_PAGE +
@@ -599,8 +584,8 @@ form.addEventListener(
         verifyUrl
       );
 
-
     }
+
 
     catch (error) {
 
@@ -628,7 +613,7 @@ form.addEventListener(
 
 
 /* =====================================
-   عرض النجاح
+   عرض النتيجة
    ===================================== */
 
 function showSuccess(
@@ -657,7 +642,7 @@ function showSuccess(
     <div class="qr-wrapper">
 
       <div class="qr-title">
-        رمز QR
+        رمز QR الخاص بالوثيقة
       </div>
 
       <div id="qrCode"></div>
@@ -691,13 +676,15 @@ function showSuccess(
     "block";
 
 
-  /* =====================================
-     توليد QR
-     ===================================== */
+  /*
+   * توليد QR
+   */
 
   new QRCode(
 
-    document.getElementById("qrCode"),
+    document.getElementById(
+      "qrCode"
+    ),
 
     {
 
@@ -718,12 +705,14 @@ function showSuccess(
   );
 
 
-  /* =====================================
-     زر الطباعة
-     ===================================== */
+  /*
+   * طباعة QR
+   */
 
   document
-    .getElementById("printButton")
+    .getElementById(
+      "printButton"
+    )
     .addEventListener(
       "click",
       function() {
@@ -736,12 +725,14 @@ function showSuccess(
     );
 
 
-  /* =====================================
-     وثيقة جديدة
-     ===================================== */
+  /*
+   * وثيقة جديدة
+   */
 
   document
-    .getElementById("newButton")
+    .getElementById(
+      "newButton"
+    )
     .addEventListener(
       "click",
       function() {
@@ -771,14 +762,16 @@ function printQR(code) {
 
   const qrImage =
     document
-      .getElementById("qrCode")
+      .getElementById(
+        "qrCode"
+      )
       .querySelector("img");
 
 
   if (!qrImage) {
 
     alert(
-      "تعذر تجهيز رمز QR للطباعة."
+      "تعذر تجهيز QR للطباعة."
     );
 
     return;
@@ -820,7 +813,7 @@ function printQR(code) {
             center;
 
           padding:
-            40px;
+            50px;
 
         }
 
