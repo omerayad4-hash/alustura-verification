@@ -8,6 +8,7 @@
   <title>الأسطورة | إنشاء وثيقة</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -108,6 +109,10 @@
       font-size: 19px;
       font-weight: bold;
       cursor: pointer;
+    }
+
+    .create-button:hover {
+      background: #1c283a;
     }
 
     .create-button:disabled {
@@ -212,7 +217,23 @@
       font-size: 14px;
     }
 
+    .error-details {
+      direction: ltr;
+      text-align: left;
+      background: white;
+      border: 1px solid #ffb3b3;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #8b0000;
+    }
+
     @media (max-width: 600px) {
+
       .card {
         padding: 22px;
       }
@@ -220,12 +241,16 @@
       .actions {
         flex-direction: column;
       }
+
     }
+
   </style>
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -361,9 +386,9 @@
 
 <script>
 
-/* =====================================
+/* =========================================
    SUPABASE
-   ===================================== */
+   ========================================= */
 
 const SUPABASE_URL =
   "https://zhaqsifliwidyhfapxsk.supabase.co";
@@ -372,17 +397,17 @@ const SUPABASE_KEY =
   "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
 
 
-/* =====================================
-   صفحة التحقق الرئيسية
-   ===================================== */
+/* =========================================
+   رابط صفحة التحقق
+   ========================================= */
 
 const VERIFY_PAGE =
   window.location.origin + "/";
 
 
-/* =====================================
+/* =========================================
    عناصر الصفحة
-   ===================================== */
+   ========================================= */
 
 const form =
   document.getElementById("documentForm");
@@ -394,23 +419,25 @@ const result =
   document.getElementById("result");
 
 
-/* =====================================
+/* =========================================
    توليد رمز التحقق
-   ===================================== */
+   ========================================= */
 
 function generateVerificationCode() {
 
-  return "AST-" +
+  const uuid =
     crypto.randomUUID()
       .replaceAll("-", "")
       .toUpperCase();
 
+  return "AST-" + uuid;
+
 }
 
 
-/* =====================================
+/* =========================================
    إنشاء الوثيقة
-   ===================================== */
+   ========================================= */
 
 form.addEventListener(
   "submit",
@@ -474,14 +501,16 @@ form.addEventListener(
     try {
 
       /*
-       * الرمز يولّد هنا.
-       * document_hash و id و status
-       * يتم توليدها تلقائيًا من قاعدة البيانات.
+       * توليد رمز فريد
        */
 
       const verificationCode =
         generateVerificationCode();
 
+
+      /*
+       * إرسال البيانات إلى Supabase
+       */
 
       const response =
         await fetch(
@@ -537,38 +566,82 @@ form.addEventListener(
         );
 
 
+      /*
+       * قراءة رد Supabase
+       */
+
       const responseText =
         await response.text();
 
 
       console.log(
-        "STATUS:",
+        "HTTP STATUS:",
         response.status
       );
 
 
       console.log(
-        "RESPONSE:",
+        "SUPABASE RESPONSE:",
         responseText
       );
 
 
+      /*
+       * إذا فشل الإدخال
+       */
+
       if (!response.ok) {
 
-        showError(
-          "تعذر حفظ الوثيقة في قاعدة البيانات."
-        );
+        let errorMessage =
+          "تعذر حفظ الوثيقة في قاعدة البيانات.";
 
-        console.error(
+        try {
+
+          const errorData =
+            JSON.parse(
+              responseText
+            );
+
+          if (errorData.message) {
+
+            errorMessage =
+              errorData.message;
+
+          }
+
+          else if (errorData.hint) {
+
+            errorMessage =
+              errorData.hint;
+
+          }
+
+        }
+
+        catch {
+
+          if (responseText) {
+
+            errorMessage =
+              responseText;
+
+          }
+
+        }
+
+
+        showError(
+          errorMessage,
           responseText
         );
+
 
         return;
       }
 
 
       /*
-       * رابط التحقق الذي سيدخل داخل QR
+       * إنشاء رابط التحقق
        */
 
       const verifyUrl =
@@ -578,6 +651,10 @@ form.addEventListener(
           verificationCode
         );
 
+
+      /*
+       * عرض النجاح
+       */
 
       showSuccess(
         verificationCode,
@@ -592,7 +669,8 @@ form.addEventListener(
       console.error(error);
 
       showError(
-        "حدث خطأ أثناء الاتصال بقاعدة البيانات."
+        "حدث خطأ أثناء الاتصال بقاعدة البيانات.",
+        error.message
       );
 
     }
@@ -612,9 +690,9 @@ form.addEventListener(
 );
 
 
-/* =====================================
-   عرض النتيجة
-   ===================================== */
+/* =========================================
+   عرض النجاح
+   ========================================= */
 
 function showSuccess(
   verificationCode,
@@ -706,7 +784,7 @@ function showSuccess(
 
 
   /*
-   * طباعة QR
+   * زر الطباعة
    */
 
   document
@@ -754,9 +832,9 @@ function showSuccess(
 }
 
 
-/* =====================================
+/* =========================================
    طباعة QR
-   ===================================== */
+   ========================================= */
 
 function printQR(code) {
 
@@ -784,6 +862,16 @@ function printQR(code) {
       "_blank",
       "width=600,height=700"
     );
+
+
+  if (!printWindow) {
+
+    alert(
+      "المتصفح منع نافذة الطباعة. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى."
+    );
+
+    return;
+  }
 
 
   printWindow.document.write(`
@@ -890,11 +978,14 @@ function printQR(code) {
 }
 
 
-/* =====================================
-   رسالة الخطأ
-   ===================================== */
+/* =========================================
+   عرض الخطأ الحقيقي
+   ========================================= */
 
-function showError(message) {
+function showError(
+  message,
+  details = ""
+) {
 
   result.className =
     "error";
@@ -910,6 +1001,18 @@ function showError(message) {
       ${escapeHtml(message)}
     </div>
 
+    ${
+      details
+      ?
+      `
+        <div class="error-details">
+          ${escapeHtml(details)}
+        </div>
+      `
+      :
+      ""
+    }
+
   `;
 
 
@@ -919,9 +1022,9 @@ function showError(message) {
 }
 
 
-/* =====================================
+/* =========================================
    حماية النصوص
-   ===================================== */
+   ========================================= */
 
 function escapeHtml(value) {
 
@@ -957,4 +1060,5 @@ function escapeHtml(value) {
 </script>
 
 </body>
+
 </html>
