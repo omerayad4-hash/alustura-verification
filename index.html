@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>الأسطورة | التحقق من الوثائق الرسمية</title>
 
   <style>
@@ -50,18 +51,21 @@
     h2 {
       text-align: center;
       margin: 0 0 8px;
+      font-size: 28px;
     }
 
     .subtitle {
       text-align: center;
       color: #777;
       margin-bottom: 35px;
+      font-size: 17px;
     }
 
     label {
       display: block;
       margin-bottom: 10px;
       font-weight: bold;
+      font-size: 17px;
     }
 
     input {
@@ -72,6 +76,11 @@
       font-size: 18px;
       direction: ltr;
       text-align: left;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #17202a;
     }
 
     button {
@@ -87,8 +96,13 @@
       cursor: pointer;
     }
 
+    button:hover {
+      background: #1b2638;
+    }
+
     button:disabled {
       opacity: .6;
+      cursor: not-allowed;
     }
 
     .result {
@@ -101,6 +115,7 @@
     .success {
       background: #f0fff4;
       border: 1px solid #8fd19e;
+      color: #17202a;
     }
 
     .error {
@@ -112,24 +127,58 @@
     .result h3 {
       text-align: center;
       margin-top: 0;
-      font-size: 24px;
+      font-size: 25px;
+    }
+
+    .details {
+      margin-top: 20px;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
-      padding: 13px 0;
+      gap: 20px;
+      padding: 14px 0;
       border-bottom: 1px solid #ddd;
+    }
+
+    .row:last-child {
+      border-bottom: none;
     }
 
     .name {
       font-weight: bold;
     }
 
+    .value {
+      text-align: left;
+    }
+
     footer {
       text-align: center;
       color: #777;
       margin: 35px 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+
+      .card {
+        padding: 22px;
+      }
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      .row {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .value {
+        text-align: right;
+      }
     }
   </style>
 </head>
@@ -151,7 +200,9 @@
       أدخل رمز التحقق الموجود على الوثيقة
     </div>
 
-    <label for="verificationCode">رمز التحقق</label>
+    <label for="verificationCode">
+      رمز التحقق
+    </label>
 
     <input
       type="text"
@@ -160,7 +211,10 @@
       placeholder="أدخل رمز التحقق"
     >
 
-    <button id="verifyButton" onclick="verifyDocument()">
+    <button
+      id="verifyButton"
+      onclick="verifyDocument()"
+    >
       التحقق من الوثيقة
     </button>
 
@@ -174,7 +228,12 @@
   نظام التحقق الإلكتروني للوثائق الرسمية © الأسطورة
 </footer>
 
+
 <script>
+
+/* =====================================
+   إعدادات Supabase
+   ===================================== */
 
 const SUPABASE_URL =
   "https://zhaqsifliwidyhfapxsk.supabase.co";
@@ -183,106 +242,140 @@ const SUPABASE_KEY =
   "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
 
 
+/* =====================================
+   التحقق من الوثيقة
+   ===================================== */
+
 async function verifyDocument() {
 
-  const code =
-    document.getElementById("verificationCode").value.trim();
+  const input =
+    window.document.getElementById("verificationCode");
 
   const button =
-    document.getElementById("verifyButton");
+    window.document.getElementById("verifyButton");
 
   const out =
-    document.getElementById("out");
+    window.document.getElementById("out");
+
+
+  const code = input.value.trim();
+
 
   out.style.display = "none";
   out.innerHTML = "";
 
+
   if (!code) {
-    showError("يرجى إدخال رمز التحقق.");
+
+    showError("يرجى إدخال رمز التحقق الموجود على الوثيقة.");
+
     return;
   }
+
 
   button.disabled = true;
   button.textContent = "جارٍ التحقق...";
 
+
   try {
 
-    const url =
-      SUPABASE_URL + "/rest/v1/rpc/verify_document";
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/rpc/verify_document",
+      {
+        method: "POST",
 
-    const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        },
 
-      method: "POST",
+        body: JSON.stringify({
+          p_code: code
+        })
+      }
+    );
 
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_KEY,
-        "Authorization": "Bearer " + SUPABASE_KEY
-      },
 
-      body: JSON.stringify({
-        p_code: code
-      })
+    const responseText =
+      await response.text();
 
-    });
 
-    const responseText = await response.text();
+    console.log(
+      "HTTP STATUS:",
+      response.status
+    );
 
-    console.log("HTTP STATUS:", response.status);
-    console.log("SUPABASE RESPONSE:", responseText);
+    console.log(
+      "SUPABASE RESPONSE:",
+      responseText
+    );
+
 
     let data;
 
     try {
+
       data = JSON.parse(responseText);
+
     } catch {
+
       data = null;
+
     }
 
-    /*
-      إذا كان Supabase يرجع خطأ،
-      سنعرض الخطأ الحقيقي بدل الرسالة العامة.
-    */
 
     if (!response.ok) {
 
       showError(
-        "خطأ من Supabase<br><br>" +
-        "<b>HTTP:</b> " + response.status +
-        "<br><br>" +
-        "<b>التفاصيل:</b><br>" +
-        escapeHtml(responseText)
+        "حدث خطأ أثناء الاتصال بنظام التحقق."
+      );
+
+      console.error(
+        "Supabase error:",
+        responseText
       );
 
       return;
     }
+
 
     if (!data || data.length === 0) {
 
       showError(
-        "رمز التحقق غير موجود في قاعدة البيانات."
+        "رمز التحقق غير موجود أو أن الوثيقة غير مسجلة في النظام."
       );
 
       return;
     }
 
-    const document = data[0];
 
-    showSuccess(document);
+    /* مهم:
+       استخدمنا doc بدل document
+       حتى لا يحدث تعارض مع document الخاص بالمتصفح.
+    */
+
+    const doc = data[0];
+
+
+    showSuccess(doc);
 
   }
+
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "Verification error:",
+      error
+    );
 
     showError(
-      "فشل الاتصال بالمخدم.<br><br>" +
-      "<b>التفاصيل:</b><br>" +
-      escapeHtml(error.message)
+      "حدث خطأ أثناء التحقق. حاول مرة أخرى."
     );
 
   }
+
 
   finally {
 
@@ -290,69 +383,112 @@ async function verifyDocument() {
     button.textContent = "التحقق من الوثيقة";
 
   }
+
 }
 
 
-function showSuccess(document) {
+/* =====================================
+   عرض الوثيقة الصحيحة
+   ===================================== */
 
-  const out = document.getElementById("out");
+function showSuccess(doc) {
 
-  out.className = "result success";
+  const out =
+    window.document.getElementById("out");
+
+
+  out.className =
+    "result success";
+
 
   out.innerHTML = `
 
     <h3>✓ الوثيقة صحيحة</h3>
 
-    <div class="row">
-      <span class="name">رقم الوثيقة</span>
-      <span>${escapeHtml(document.document_number || "-")}</span>
-    </div>
+    <div class="details">
 
-    <div class="row">
-      <span class="name">تاريخ الوثيقة</span>
-      <span>${escapeHtml(document.document_date || "-")}</span>
-    </div>
+      <div class="row">
+        <span class="name">رقم الوثيقة</span>
+        <span class="value">
+          ${escapeHtml(doc.document_number || "-")}
+        </span>
+      </div>
 
-    <div class="row">
-      <span class="name">الجهة المستلمة</span>
-      <span>${escapeHtml(document.recipient || "-")}</span>
-    </div>
+      <div class="row">
+        <span class="name">تاريخ الوثيقة</span>
+        <span class="value">
+          ${escapeHtml(doc.document_date || "-")}
+        </span>
+      </div>
 
-    <div class="row">
-      <span class="name">الموضوع</span>
-      <span>${escapeHtml(document.subject || "-")}</span>
-    </div>
+      <div class="row">
+        <span class="name">الجهة المستلمة</span>
+        <span class="value">
+          ${escapeHtml(doc.recipient || "-")}
+        </span>
+      </div>
 
-    <div class="row">
-      <span class="name">الموقّع</span>
-      <span>${escapeHtml(document.signatory || "-")}</span>
-    </div>
+      <div class="row">
+        <span class="name">الموضوع</span>
+        <span class="value">
+          ${escapeHtml(doc.subject || "-")}
+        </span>
+      </div>
 
-    <div class="row">
-      <span class="name">الحالة</span>
-      <span>${escapeHtml(document.status || "-")}</span>
-    </div>
+      <div class="row">
+        <span class="name">الموقّع</span>
+        <span class="value">
+          ${escapeHtml(doc.signatory || "-")}
+        </span>
+      </div>
 
+      <div class="row">
+        <span class="name">الحالة</span>
+        <span class="value">
+          ${escapeHtml(doc.status || "-")}
+        </span>
+      </div>
+
+    </div>
   `;
+
 
   out.style.display = "block";
 }
 
+
+/* =====================================
+   عرض الخطأ
+   ===================================== */
 
 function showError(message) {
 
-  const out = document.getElementById("out");
+  const out =
+    window.document.getElementById("out");
 
-  out.className = "result error";
+
+  out.className =
+    "result error";
+
 
   out.innerHTML = `
+
     <h3>✕ تعذر التحقق</h3>
-    <p style="text-align:center;">${message}</p>
+
+    <p style="text-align:center;">
+      ${escapeHtml(message)}
+    </p>
+
   `;
+
 
   out.style.display = "block";
 }
 
+
+/* =====================================
+   حماية النصوص
+   ===================================== */
 
 function escapeHtml(value) {
 
@@ -366,25 +502,38 @@ function escapeHtml(value) {
 }
 
 
-window.addEventListener("DOMContentLoaded", function () {
+/* =====================================
+   التحقق من الرابط المباشر
+   مثال:
+   ?code=AST-XXXXXXXX
+   ===================================== */
 
-  const params =
-    new URLSearchParams(window.location.search);
+window.addEventListener(
+  "DOMContentLoaded",
+  function () {
 
-  const code =
-    params.get("code");
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
 
-  if (code) {
 
-    document.getElementById(
-      "verificationCode"
-    ).value = code;
+    const code =
+      params.get("code");
 
-    verifyDocument();
+
+    if (code) {
+
+      window.document
+        .getElementById("verificationCode")
+        .value = code;
+
+      verifyDocument();
+
+    }
 
   }
-
-});
+);
 
 </script>
 
