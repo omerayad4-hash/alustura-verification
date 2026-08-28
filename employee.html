@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>الأسطورة | إنشاء وثيقة</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      color: #101827;
+      font-family: Arial, Tahoma, sans-serif;
+    }
+
+    header {
+      background: #101827;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 800px;
+      margin: 45px auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      text-align: center;
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 35px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #ccd3da;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 17px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input {
+      height: 58px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #101827;
+    }
+
+    .create-button {
+      width: 100%;
+      height: 62px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      background: #101827;
+      color: white;
+      font-size: 19px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .create-button:hover {
+      background: #1c283a;
+    }
+
+    .create-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    #result {
+      display: none;
+      margin-top: 30px;
+      padding: 28px;
+      border-radius: 16px;
+    }
+
+    .success {
+      background: #f0fff4;
+      border: 1px solid #8bd19e;
+    }
+
+    .error {
+      background: #fff2f2;
+      border: 1px solid #ff9999;
+      color: #a52222;
+    }
+
+    .success-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 25px;
+    }
+
+    .code-label {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .code-box {
+      background: white;
+      border: 1px solid #d5dce2;
+      border-radius: 12px;
+      padding: 17px;
+      text-align: center;
+      direction: ltr;
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: bold;
+      word-break: break-all;
+      margin-bottom: 25px;
+    }
+
+    .qr-wrapper {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .qr-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    #qrCode {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .actions button {
+      flex: 1;
+      height: 55px;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .print-button {
+      background: #101827;
+      color: white;
+    }
+
+    .new-button {
+      background: #e7ebef;
+      color: #101827;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      margin: 35px 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+
+      .card {
+        padding: 22px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>الأسطورة</h1>
+
+  <p>
+    نظام إنشاء وتوثيق الوثائق الرسمية
+  </p>
+
+</header>
+
+
+<div class="container">
+
+  <div class="card">
+
+    <h2>
+      إنشاء وثيقة جديدة
+    </h2>
+
+    <div class="subtitle">
+      أدخل المعلومات الموجودة في الوثيقة الرسمية
+    </div>
+
+
+    <form id="documentForm">
+
+
+      <div class="field">
+
+        <label for="documentNumber">
+          رقم الوثيقة
+        </label>
+
+        <input
+          id="documentNumber"
+          type="text"
+          placeholder="مثال: 123/2026"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="documentDate">
+          تاريخ الوثيقة
+        </label>
+
+        <input
+          id="documentDate"
+          type="date"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="recipient">
+          الجهة المستلمة
+        </label>
+
+        <input
+          id="recipient"
+          type="text"
+          placeholder="مثال: وزارة الثقافة"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="subject">
+          موضوع الوثيقة
+        </label>
+
+        <textarea
+          id="subject"
+          placeholder="اكتب موضوع الوثيقة"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="signatory">
+          الموقّع
+        </label>
+
+        <input
+          id="signatory"
+          type="text"
+          placeholder="اسم الموقّع"
+          required
+        >
+
+      </div>
+
+
+      <button
+        id="createButton"
+        class="create-button"
+        type="submit"
+      >
+        إنشاء الوثيقة وتوليد QR
+      </button>
+
+
+    </form>
+
+
+    <div id="result"></div>
+
+  </div>
+
+</div>
+
+
+<footer>
+  نظام التحقق الإلكتروني للوثائق الرسمية © الأسطورة
+</footer>
+
+
+<!-- مكتبة توليد QR -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+<script>
+
+
+/* =====================================
+   إعدادات Supabase
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://zhaqsifliwidyhfapxsk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
+
+
+/* =====================================
+   رابط صفحة التحقق
+   ===================================== */
+
+const VERIFY_PAGE =
+  window.location.origin + "/";
+
+
+/* =====================================
+   عناصر الصفحة
+   ===================================== */
+
+const form =
+  document.getElementById("documentForm");
+
+const createButton =
+  document.getElementById("createButton");
+
+const result =
+  document.getElementById("result");
+
+
+/* =====================================
+   توليد رمز تحقق فريد
+   ===================================== */
+
+function generateVerificationCode() {
+
+  const randomPart =
+    crypto.randomUUID()
+      .replaceAll("-", "")
+      .toUpperCase();
+
+  return "AST-" + randomPart;
+
+}
+
+
+/* =====================================
+   إنشاء الوثيقة
+   ===================================== */
+
+form.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+
+    const documentNumber =
+      document
+        .getElementById("documentNumber")
+        .value
+        .trim();
+
+
+    const documentDate =
+      document
+        .getElementById("documentDate")
+        .value;
+
+
+    const recipient =
+      document
+        .getElementById("recipient")
+        .value
+        .trim();
+
+
+    const subject =
+      document
+        .getElementById("subject")
+        .value
+        .trim();
+
+
+    const signatory =
+      document
+        .getElementById("signatory")
+        .value
+        .trim();
+
+
+    if (
+      !documentNumber ||
+      !documentDate ||
+      !recipient ||
+      !subject ||
+      !signatory
+    ) {
+
+      showError(
+        "يرجى إدخال جميع معلومات الوثيقة."
+      );
+
+      return;
+    }
+
+
+    createButton.disabled = true;
+
+    createButton.textContent =
+      "جارٍ إنشاء الوثيقة...";
+
+
+    try {
+
+      const verificationCode =
+        generateVerificationCode();
+
+
+      const response =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/official_documents",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json",
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " + SUPABASE_KEY,
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body: JSON.stringify({
+
+              document_number:
+                documentNumber,
+
+              document_date:
+                documentDate,
+
+              recipient:
+                recipient,
+
+              subject:
+                subject,
+
+              signatory:
+                signatory,
+
+              verification_code:
+                verificationCode,
+
+              status:
+                "active"
+
+            })
+
+          }
+
+        );
+
+
+      const responseText =
+        await response.text();
+
+
+      console.log(
+        "STATUS:",
+        response.status
+      );
+
+
+      console.log(
+        "RESPONSE:",
+        responseText
+      );
+
+
+      if (!response.ok) {
+
+        showError(
+          "تعذر حفظ الوثيقة في قاعدة البيانات."
+        );
+
+        console.error(
+          responseText
+        );
+
+        return;
+      }
+
+
+      /* =====================================
+         رابط التحقق الذي سيكون داخل QR
+         ===================================== */
+
+      const verifyUrl =
+        VERIFY_PAGE +
+        "?code=" +
+        encodeURIComponent(
+          verificationCode
+        );
+
+
+      showSuccess(
+        verificationCode,
+        verifyUrl
+      );
+
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      showError(
+        "حدث خطأ أثناء الاتصال بقاعدة البيانات."
+      );
+
+    }
+
+
+    finally {
+
+      createButton.disabled =
+        false;
+
+      createButton.textContent =
+        "إنشاء الوثيقة وتوليد QR";
+
+    }
+
+  }
+);
+
+
+/* =====================================
+   عرض النجاح
+   ===================================== */
+
+function showSuccess(
+  verificationCode,
+  verifyUrl
+) {
+
+  result.className =
+    "success";
+
+
+  result.innerHTML = `
+
+    <div class="success-title">
+      ✓ تم إنشاء الوثيقة بنجاح
+    </div>
+
+    <div class="code-label">
+      رمز التحقق الخاص بالوثيقة
+    </div>
+
+    <div class="code-box">
+      ${escapeHtml(verificationCode)}
+    </div>
+
+    <div class="qr-wrapper">
+
+      <div class="qr-title">
+        رمز QR
+      </div>
+
+      <div id="qrCode"></div>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        id="printButton"
+        class="print-button"
+        type="button"
+      >
+        طباعة QR
+      </button>
+
+      <button
+        id="newButton"
+        class="new-button"
+        type="button"
+      >
+        وثيقة جديدة
+      </button>
+
+    </div>
+
+  `;
+
+
+  result.style.display =
+    "block";
+
+
+  /* =====================================
+     توليد QR
+     ===================================== */
+
+  new QRCode(
+
+    document.getElementById("qrCode"),
+
+    {
+
+      text:
+        verifyUrl,
+
+      width:
+        260,
+
+      height:
+        260,
+
+      correctLevel:
+        QRCode.CorrectLevel.H
+
+    }
+
+  );
+
+
+  /* =====================================
+     زر الطباعة
+     ===================================== */
+
+  document
+    .getElementById("printButton")
+    .addEventListener(
+      "click",
+      function() {
+
+        printQR(
+          verificationCode
+        );
+
+      }
+    );
+
+
+  /* =====================================
+     وثيقة جديدة
+     ===================================== */
+
+  document
+    .getElementById("newButton")
+    .addEventListener(
+      "click",
+      function() {
+
+        form.reset();
+
+        result.style.display =
+          "none";
+
+        document
+          .getElementById(
+            "documentNumber"
+          )
+          .focus();
+
+      }
+    );
+
+}
+
+
+/* =====================================
+   طباعة QR
+   ===================================== */
+
+function printQR(code) {
+
+  const qrImage =
+    document
+      .getElementById("qrCode")
+      .querySelector("img");
+
+
+  if (!qrImage) {
+
+    alert(
+      "تعذر تجهيز رمز QR للطباعة."
+    );
+
+    return;
+  }
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=600,height=700"
+    );
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html lang="ar" dir="rtl">
+
+    <head>
+
+      <meta charset="UTF-8">
+
+      <title>
+        رمز تحقق - الأسطورة
+      </title>
+
+      <style>
+
+        body {
+
+          font-family:
+            Arial,
+            Tahoma,
+            sans-serif;
+
+          text-align:
+            center;
+
+          padding:
+            40px;
+
+        }
+
+        img {
+
+          width:
+            300px;
+
+          height:
+            300px;
+
+        }
+
+        .code {
+
+          direction:
+            ltr;
+
+          font-family:
+            monospace;
+
+          font-size:
+            18px;
+
+          font-weight:
+            bold;
+
+          margin-top:
+            20px;
+
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h2>
+        رمز التحقق الإلكتروني
+      </h2>
+
+      <img src="${qrImage.src}">
+
+      <div class="code">
+        ${escapeHtml(code)}
+      </div>
+
+      <p>
+        امسح رمز QR للتحقق من صحة الوثيقة
+      </p>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  printWindow.document.close();
+
+  printWindow.focus();
+
+
+  setTimeout(
+    function() {
+
+      printWindow.print();
+
+    },
+    500
+  );
+
+}
+
+
+/* =====================================
+   رسالة الخطأ
+   ===================================== */
+
+function showError(message) {
+
+  result.className =
+    "error";
+
+
+  result.innerHTML = `
+
+    <div class="success-title">
+      ✕ تعذر إنشاء الوثيقة
+    </div>
+
+    <div style="text-align:center;">
+      ${escapeHtml(message)}
+    </div>
+
+  `;
+
+
+  result.style.display =
+    "block";
+
+}
+
+
+/* =====================================
+   حماية النصوص
+   ===================================== */
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
