@@ -1,433 +1,453 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>أرشيف الأسطورة</title>
+<title>أرشيف الأسطورة</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f5f7;
-      color: #222;
-    }
+body {
+  margin: 0;
+  background: #f4f5f7;
+  font-family: Arial, Tahoma, sans-serif;
+  color: #222;
+}
 
-    .header {
-      background: #111827;
-      color: white;
-      padding: 22px 18px;
-      text-align: center;
-    }
+.header {
+  background: #111827;
+  color: white;
+  padding: 22px 18px;
+  text-align: center;
+}
 
-    .header h1 {
-      margin: 0;
-      font-size: 25px;
-    }
+.header h1 {
+  margin: 0;
+  font-size: 25px;
+}
 
-    .header p {
-      margin: 7px 0 0;
-      color: #d1d5db;
-      font-size: 14px;
-    }
+.header p {
+  margin: 7px 0 0;
+  color: #d1d5db;
+  font-size: 14px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 600px;
-      margin: auto;
-      padding: 18px;
-    }
+.container {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 18px;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-    }
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+}
 
-    .section-title {
-      font-size: 19px;
-      font-weight: bold;
-      margin-bottom: 18px;
-    }
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 15px 0 7px;
-      font-size: 14px;
-    }
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 15px 0 7px;
+}
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 16px;
-      outline: none;
-      font-family: inherit;
-    }
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+}
 
-    input:focus,
-    textarea:focus {
-      border-color: #111827;
-    }
+input:focus,
+textarea:focus {
+  border-color: #111827;
+}
 
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
 
-    .camera-box {
-      margin-top: 18px;
-      border: 2px dashed #9ca3af;
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
-      background: #f9fafb;
-    }
+.camera-box {
+  margin-top: 20px;
+  padding: 20px;
+  text-align: center;
+  border: 2px dashed #9ca3af;
+  border-radius: 14px;
+  background: #f9fafb;
+}
 
-    .camera-icon {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+.camera-icon {
+  font-size: 42px;
+}
 
-    .camera-text {
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+.camera-text {
+  font-weight: bold;
+  margin: 8px 0 14px;
+}
 
-    .file-input {
-      width: 100%;
-      padding: 12px;
-      background: white;
-    }
+.file-input {
+  width: 100%;
+  background: white;
+}
 
-    .preview {
-      margin-top: 15px;
-      display: none;
-    }
+.preview {
+  display: none;
+  margin-top: 15px;
+}
 
-    .preview img {
-      width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #eee;
-    }
+.preview img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
 
-    .file-name {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #555;
-      word-break: break-all;
-    }
+.file-name {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #555;
+  word-break: break-all;
+}
 
-    .save-btn {
-      width: 100%;
-      margin-top: 22px;
-      padding: 16px;
-      border: none;
-      border-radius: 12px;
-      background: #111827;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.save-btn {
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #111827;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .save-btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-    }
+.save-btn:disabled {
+  background: #9ca3af;
+}
 
-    .message {
-      display: none;
-      margin-top: 15px;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 15px;
-      line-height: 1.7;
-    }
+.message {
+  display: none;
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  line-height: 1.8;
+}
 
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
+.success {
+  display: block;
+  background: #dcfce7;
+  color: #166534;
+}
 
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
+.error {
+  display: block;
+  background: #fee2e2;
+  color: #991b1b;
+}
 
-    .archive-number {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 8px;
-    }
+.archive-number {
+  font-weight: bold;
+  font-size: 18px;
+}
 
-    .required {
-      color: #dc2626;
-    }
-  </style>
+.loading {
+  display: none;
+  text-align: center;
+  margin-top: 15px;
+  color: #555;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>أرشيف الأسطورة</h1>
-    <p>نظام أرشفة الوثائق</p>
-  </div>
+<div class="header">
+  <h1>أرشيف الأسطورة</h1>
+  <p>نظام أرشفة الوثائق</p>
+</div>
 
-  <div class="container">
+<div class="container">
 
-    <div class="card">
+<div class="card">
 
-      <div class="section-title">
-        📁 أرشفة وثيقة جديدة
-      </div>
+<div class="title">
+📁 أرشفة وثيقة جديدة
+</div>
 
-      <label>
-        رقم الوثيقة <span class="required">*</span>
-      </label>
+<label>رقم الوثيقة *</label>
 
-      <input
-        type="text"
-        id="documentNumber"
-        placeholder="مثال: 123/2026"
-      >
+<input
+  id="documentNumber"
+  type="text"
+  placeholder="مثال: 123/2026"
+>
 
-      <label>
-        تاريخ الوثيقة
-      </label>
+<label>تاريخ الوثيقة</label>
 
-      <input
-        type="date"
-        id="documentDate"
-      >
+<input
+  id="documentDate"
+  type="date"
+>
 
-      <label>
-        موضوع الوثيقة
-      </label>
+<label>موضوع الوثيقة</label>
 
-      <input
-        type="text"
-        id="subject"
-        placeholder="موضوع الوثيقة"
-      >
+<input
+  id="subject"
+  type="text"
+  placeholder="موضوع الوثيقة"
+>
 
-      <label>
-        الجهة المرسلة
-      </label>
+<label>الجهة المرسلة</label>
 
-      <input
-        type="text"
-        id="sender"
-        placeholder="اسم الجهة"
-      >
+<input
+  id="sender"
+  type="text"
+  placeholder="اسم الجهة"
+>
 
-      <label>
-        الجهة المستلمة
-      </label>
+<label>الجهة المستلمة</label>
 
-      <input
-        type="text"
-        id="recipient"
-        placeholder="اسم الجهة"
-      >
+<input
+  id="recipient"
+  type="text"
+  placeholder="اسم الجهة"
+>
 
-      <label>
-        اسم الشخص
-      </label>
+<label>اسم الشخص</label>
 
-      <input
-        type="text"
-        id="personName"
-        placeholder="اختياري"
-      >
+<input
+  id="personName"
+  type="text"
+  placeholder="اختياري"
+>
 
-      <label>
-        ملاحظات
-      </label>
+<label>ملاحظات</label>
 
-      <textarea
-        id="notes"
-        placeholder="أي ملاحظات إضافية..."
-      ></textarea>
+<textarea
+  id="notes"
+  placeholder="أي ملاحظات إضافية..."
+></textarea>
 
-      <div class="camera-box">
 
-        <div class="camera-icon">📷</div>
+<div class="camera-box">
 
-        <div class="camera-text">
-          تصوير أو اختيار الوثيقة
-        </div>
+<div class="camera-icon">📷</div>
 
-        <input
-          class="file-input"
-          type="file"
-          id="documentFile"
-          accept="image/*,.pdf"
-          capture="environment"
-        >
+<div class="camera-text">
+تصوير أو اختيار الوثيقة
+</div>
 
-        <div class="preview" id="preview">
-          <img id="previewImage" alt="معاينة الوثيقة">
-          <div class="file-name" id="fileName"></div>
-        </div>
+<input
+  id="documentFile"
+  class="file-input"
+  type="file"
+  accept="image/*,.pdf"
+  capture="environment"
+>
 
-      </div>
+<div id="preview" class="preview">
 
-      <button
-        class="save-btn"
-        id="saveBtn"
-        onclick="saveDocument()"
-      >
-        💾 حفظ الوثيقة
-      </button>
+<img id="previewImage">
 
-      <div
-        class="message"
-        id="message"
-      ></div>
+<div id="fileName" class="file-name"></div>
 
-    </div>
+</div>
 
-  </div>
+</div>
+
+
+<button
+  id="saveBtn"
+  class="save-btn"
+  onclick="saveDocument()"
+>
+💾 حفظ الوثيقة
+</button>
+
+<div id="loading" class="loading">
+⏳ جاري رفع الوثيقة وحفظ البيانات...
+</div>
+
+<div id="message" class="message"></div>
+
+</div>
+
+</div>
+
 
 <script>
 
 const SUPABASE_URL =
-  "https://zhaqsifliwidyhfapxsk.supabase.co";
+"https://zhaqsifliwidyhfapxsk.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
+"sb_publishable_-ZdfRe1d1YCe87QvwuEcAQ_f3oghzsC";
 
 const BUCKET =
-  "archive-documents";
+"archive-documents";
 
 
 const fileInput =
-  document.getElementById("documentFile");
+document.getElementById("documentFile");
 
 const preview =
-  document.getElementById("preview");
+document.getElementById("preview");
 
 const previewImage =
-  document.getElementById("previewImage");
+document.getElementById("previewImage");
 
 const fileName =
-  document.getElementById("fileName");
-
-const message =
-  document.getElementById("message");
+document.getElementById("fileName");
 
 const saveBtn =
-  document.getElementById("saveBtn");
+document.getElementById("saveBtn");
+
+const message =
+document.getElementById("message");
+
+const loading =
+document.getElementById("loading");
 
 
-fileInput.addEventListener("change", function () {
+/* معاينة الصورة */
+
+fileInput.addEventListener("change", function() {
 
   const file = this.files[0];
 
   if (!file) {
+
     preview.style.display = "none";
+
     return;
   }
 
   fileName.textContent =
     "الملف: " + file.name;
 
+
   if (file.type.startsWith("image/")) {
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload =
+      function(event) {
 
-      previewImage.src = e.target.result;
+        previewImage.src =
+          event.target.result;
 
-      preview.style.display = "block";
+        preview.style.display =
+          "block";
 
-    };
+      };
 
     reader.readAsDataURL(file);
 
   } else {
 
-    preview.style.display = "block";
-
     previewImage.removeAttribute("src");
 
+    preview.style.display =
+      "block";
   }
 
 });
 
 
-function showMessage(text, type) {
+/* رسالة */
 
-  message.style.display = "block";
+function showMessage(text, type) {
 
   message.className =
     "message " + type;
 
-  message.innerHTML = text;
+  message.innerHTML =
+    text;
 
 }
 
 
+/* رقم الأرشيف */
+
 function generateArchiveNumber() {
 
-  const now = new Date();
+  const now =
+    new Date();
 
   const year =
     now.getFullYear();
 
   const random =
     Math.floor(
-      100000 + Math.random() * 900000
+      100000 +
+      Math.random() * 900000
     );
 
-  return "ARC-" + year + "-" + random;
-
+  return "ARC-" +
+    year +
+    "-" +
+    random;
 }
 
+
+/* حفظ الوثيقة */
 
 async function saveDocument() {
 
   const documentNumber =
-    document.getElementById("documentNumber")
-    .value.trim();
+    document.getElementById(
+      "documentNumber"
+    ).value.trim();
 
   const documentDate =
-    document.getElementById("documentDate")
-    .value;
+    document.getElementById(
+      "documentDate"
+    ).value;
 
   const subject =
-    document.getElementById("subject")
-    .value.trim();
+    document.getElementById(
+      "subject"
+    ).value.trim();
 
   const sender =
-    document.getElementById("sender")
-    .value.trim();
+    document.getElementById(
+      "sender"
+    ).value.trim();
 
   const recipient =
-    document.getElementById("recipient")
-    .value.trim();
+    document.getElementById(
+      "recipient"
+    ).value.trim();
 
   const personName =
-    document.getElementById("personName")
-    .value.trim();
+    document.getElementById(
+      "personName"
+    ).value.trim();
 
   const notes =
-    document.getElementById("notes")
-    .value.trim();
+    document.getElementById(
+      "notes"
+    ).value.trim();
 
   const file =
     fileInput.files[0];
@@ -447,7 +467,7 @@ async function saveDocument() {
   if (!file) {
 
     showMessage(
-      "⚠️ يرجى تصوير الوثيقة أو اختيار ملف.",
+      "⚠️ يرجى تصوير الوثيقة أولاً.",
       "error"
     );
 
@@ -457,28 +477,42 @@ async function saveDocument() {
 
   saveBtn.disabled = true;
 
-  saveBtn.textContent =
-    "⏳ جاري الحفظ...";
+  loading.style.display =
+    "block";
+
+  message.className =
+    "message";
 
 
   try {
+
+    /*
+    إنشاء رقم الأرشيف
+    */
 
     const archiveNumber =
       generateArchiveNumber();
 
 
+    /*
+    اسم الملف
+    */
+
     const extension =
       file.name.includes(".")
-      ? file.name.split(".").pop().toLowerCase()
-      : "file";
+      ? file.name
+          .split(".")
+          .pop()
+          .toLowerCase()
+      : "jpg";
 
 
-    const safeFileName =
+    const fileNameSafe =
       Date.now() +
-      "_" +
+      "-" +
       Math.random()
         .toString(36)
-        .substring(2, 10) +
+        .substring(2,10) +
       "." +
       extension;
 
@@ -486,30 +520,43 @@ async function saveDocument() {
     const filePath =
       archiveNumber +
       "/" +
-      safeFileName;
+      fileNameSafe;
 
 
     /*
-      1 — رفع الملف إلى Storage
+    رفع الملف إلى Supabase Storage
     */
+
+    const uploadURL =
+      SUPABASE_URL +
+      "/storage/v1/object/" +
+      BUCKET +
+      "/" +
+      filePath;
+
 
     const uploadResponse =
       await fetch(
-        SUPABASE_URL +
-        "/storage/v1/object/" +
-        BUCKET +
-        "/" +
-        filePath,
+        uploadURL,
         {
           method: "POST",
 
           headers: {
-            "apikey": SUPABASE_KEY,
+
+            "apikey":
+              SUPABASE_KEY,
+
             "Authorization":
-              "Bearer " + SUPABASE_KEY,
+              "Bearer " +
+              SUPABASE_KEY,
+
+            "x-upsert":
+              "false",
+
             "Content-Type":
               file.type ||
               "application/octet-stream"
+
           },
 
           body: file
@@ -526,15 +573,14 @@ async function saveDocument() {
         "فشل رفع الملف: " +
         errorText
       );
-
     }
 
 
     /*
-      2 — حفظ معلومات الوثيقة
+    حفظ بيانات الوثيقة
     */
 
-    const insertResponse =
+    const databaseResponse =
       await fetch(
         SUPABASE_URL +
         "/rest/v1/archive_documents",
@@ -542,13 +588,20 @@ async function saveDocument() {
           method: "POST",
 
           headers: {
-            "apikey": SUPABASE_KEY,
+
+            "apikey":
+              SUPABASE_KEY,
+
             "Authorization":
-              "Bearer " + SUPABASE_KEY,
+              "Bearer " +
+              SUPABASE_KEY,
+
             "Content-Type":
               "application/json",
+
             "Prefer":
               "return=representation"
+
           },
 
           body: JSON.stringify({
@@ -560,63 +613,78 @@ async function saveDocument() {
               documentNumber,
 
             document_date:
-              documentDate || null,
+              documentDate ||
+              null,
 
             subject:
-              subject || null,
+              subject ||
+              null,
 
             sender:
-              sender || null,
+              sender ||
+              null,
 
             recipient:
-              recipient || null,
+              recipient ||
+              null,
 
             person_name:
-              personName || null,
+              personName ||
+              null,
 
             notes:
-              notes || null,
+              notes ||
+              null,
 
             file_path:
               filePath,
 
             file_type:
-              file.type || null
+              file.type ||
+              null
 
           })
         }
       );
 
 
-    if (!insertResponse.ok) {
+    if (!databaseResponse.ok) {
 
       const errorText =
-        await insertResponse.text();
+        await databaseResponse.text();
 
       throw new Error(
         "فشل حفظ بيانات الوثيقة: " +
         errorText
       );
-
     }
 
 
     /*
-      3 — نجاح
+    نجاح
     */
 
     showMessage(
+
       "✅ تم حفظ الوثيقة بنجاح!" +
+
+      "<br><br>" +
+
+      "رقم الأرشيف:" +
+
       "<div class='archive-number'>" +
-      "رقم الأرشيف: " +
+
       archiveNumber +
+
       "</div>",
+
       "success"
+
     );
 
 
     /*
-      تنظيف النموذج
+    تنظيف الحقول
     */
 
     document.getElementById(
@@ -653,23 +721,30 @@ async function saveDocument() {
       "none";
 
 
-  } catch (error) {
+  } catch(error) {
 
     console.error(error);
 
     showMessage(
-      "❌ حدث خطأ أثناء الحفظ.<br><br>" +
+
+      "❌ حدث خطأ أثناء الحفظ." +
+
+      "<br><br>" +
+
       error.message,
+
       "error"
+
     );
 
   }
 
 
-  saveBtn.disabled = false;
+  saveBtn.disabled =
+    false;
 
-  saveBtn.textContent =
-    "💾 حفظ الوثيقة";
+  loading.style.display =
+    "none";
 
 }
 
